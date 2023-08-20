@@ -1,0 +1,117 @@
+{% load static %}
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" data-bg-class="bg-menu-theme">
+  <div class="app-brand">
+    <a href="{% url 'home' %}" class="d-flex align-items-center flex-column justify-content-center">
+      <img src="{% static 'assets/img/logo/myacademy_logo.png' %}" style=" height: 80px;" alt="">
+    </a>
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
+      <i class="bx bx-chevron-left bx-sm align-middle"></i>
+    </a>
+  </div>
+  <div class="menu-inner-shadow"></div>
+  
+  <!-- Администратор -->
+  {% if request.user.role == '1' %}
+  {% with request.resolver_match.url_name as url_name %}
+  <ul class="menu-inner py-1 ps ps--active-y">
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">Администрирование</span></li>
+    <li class="menu-item {% if url_name == 'home' %} active {% endif %}">
+      <a href="{% url 'home' %}" class="menu-link">
+        <i class=' menu-icon bx bx-calendar'></i>
+        <div data-i18n="Tables">Расписание</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'course-list' %} active {% endif %}">
+      <a href="{% url 'course-list' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-notepad"></i>
+        <div data-i18n="Tables">Курсы</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'group-list' %} active {% endif %}">
+      <a href="{% url 'group-list' %}" class="menu-link">
+        <i class=' menu-icon bx bx-group'></i>
+        <div data-i18n="Tables">Группы</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'room-list' %} active {% endif %}">
+      <a href="{% url 'room-list' %}" class="menu-link">
+        <i class=' menu-icon bx bx-door-open' ></i>
+        <div data-i18n="Tables">Кабинеты</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'teacher-list' %} active {% endif %}">
+      <a href="{% url 'teacher-list' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-chalkboard"></i>
+        <div data-i18n="Tables">Преподаватели</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'pupil-list' %} active {% endif %}">
+      <a href="{% url 'pupil-list' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user"></i>
+        <div data-i18n="Tables">Студенты</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'report-view' %} active {% endif %}">
+      <a href="{% url 'report-view' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bxs-report"></i>
+        <div data-i18n="Tables">Отчёты</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'kpi-view' %} active {% endif %}">
+      <a href="{% url 'kpi-view' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-aperture"></i>
+        <div data-i18n="Tables">KPI</div>
+      </a>
+    </li>
+  </ul>
+  {% endwith %}
+  {% endif %}
+  <!-- Преподаватель -->
+  {% if request.user.role == '3' %}
+  {% with request.resolver_match.url_name as url_name %}
+  <ul class="menu-inner py-1 ps ps--active-y">
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">Преподавание</span></li>
+    <li class="menu-item {% if url_name == 'home' %} active {% endif %}">
+      <a href="{% url 'home' %}" class="menu-link">
+        <i class=' menu-icon bx bx-calendar'></i>
+        <div data-i18n="Tables">Расписание</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'teacher-pupils' %} active {% endif %}">
+      <a href="{% url 'teacher-pupils' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user"></i>
+        <div data-i18n="Tables">Студенты</div>
+      </a>
+    </li>
+    <li class="menu-item {% if url_name == 'teacher-lessons' %} active {% endif %}">
+      <a href="{% url 'teacher-lessons' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-notepad"></i>
+        <div data-i18n="Tables">Уроки</div>
+      </a>
+    </li>
+
+  </ul>
+  {% endwith %}
+  {% endif %}
+    <!-- Студент -->
+    {% if request.user.role == '2' %}
+    {% with request.resolver_match.url_name as url_name %}
+    <ul class="menu-inner py-1 ps ps--active-y">
+      <li class="menu-header small text-uppercase"><span class="menu-header-text">Обучение</span></li>
+      <li class="menu-item {% if url_name == 'home' %} active {% endif %}">
+        <a href="{% url 'home' %}" class="menu-link">
+          <i class=' menu-icon bx bx-calendar'></i>
+          <div data-i18n="Tables">Расписание</div>
+        </a>
+      </li>
+      <li class="menu-item {% if url_name == 'pupil-lessons' %} active {% endif %}">
+        <a href="{% url 'pupil-lessons' %}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-user"></i>
+          <div data-i18n="Tables">Мои уроки</div>
+        </a>
+      </li>
+    </ul>
+    {% endwith %}
+    {% endif %}
+
+</aside>

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="modal fade" id="basicModal" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel1">Удаление курса</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <span>Вы действительно хотите удалить этот курс?</span>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                  <form action="" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" name="delete">Удалить</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i
+                                class="bx bx-user me-1"></i>Курс</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'lesson-list' course.id %}"><i class='bx bx-group'></i> Уроки</a></li>
+                </ul>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 order-1 mb-4">
+                        <div class="card">
+                          <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Информация о курсе</h5>
+                            <div class="dropdown">
+                                <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
+                                  <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                    Удалить
+                                  </button>
+                                  
+                                  <a class="dropdown-item" href="№">Изменить</a>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="card-body">
+                            <ul class="p-0 m-0">
+                                <small class="text-muted d-block mb-1">Название</small>
+                                <div class="me-2 mb-2">
+                                    <span class="mb-0">{{ course.title }}</span>
+                                </div>
+                                <small class="text-muted d-block mb-1">Цена</small>
+                                <div class="me-2 mb-2">
+                                    <span class="mb-0">{{ course.price }}с</span>
+                                </div>
+                                <small class="text-muted d-block mb-1">Длительность</small>
+                                <div class="me-2 mb-2">
+                                    <span class="mb-0">{{ course.duration }}мин</span>
+                                </div>
+                                <small class="text-muted d-block mb-1">Всего групп</small>
+                                <div class="me-2 mb-2">
+                                    <span class="mb-0">{{ course.group_set.count }}</span>
+                                </div>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="col-md-6 col-lg-4 order-2 mb-4">
+                      <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                          <h5 class="card-title m-0 me-2">Группы</h5>
+                        </div>
+                        <div class="card-body">
+                          <ul class="p-0 m-0">
+                             {% for group in groups %}
+                             <li class="d-flex mb-4 pb-1">
+                                <div class="avatar flex-shrink-0 me-3">
+                                  <i class="bx bx-group"></i>
+                                </div>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                  <div class="me-2">
+                                    <small class="text-muted d-block mb-1">{{ group.start_time }}</small>
+                                    <h6 class="mb-0"><a href="{% url 'group-detail' group.id %}">{{ group.title }}</a></h6>
+                                  </div>
+                                  <div class="user-progress d-flex align-items-center gap-1">
+                                    <h6 class="mb-0">{{ group.pupil_set.count }}</h6> <span class="text-muted"><i class='bx bx-face'></i></span>
+                                  </div>
+                                </div>
+                              </li>
+                             {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 order-2 mb-4">
+                        <div class="nav-align-top mb-4">
+                          <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                              <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="true">Студенты</button>
+                            </li>
+                            <li class="nav-item">
+                              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false">Преподаватели</button>
+                            </li>
+                          </ul>
+                          <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navs-top-home" role="tabpanel">
+                              <ul class="p-0 m-0">
+                                {% for pupil in pupils %}
+                                <li class="d-flex mb-4 pb-1">
+                                   <div class="avatar flex-shrink-0 me-3">
+                                     {% if pupil.image %}
+                                     <img src="{{ pupil.image.url }}" alt="User" class="rounded">
+                                     {% else %}
+                                     <img src="{% static 'assets/img/avatars/5.png' %}" alt="User" class="rounded">
+                                     {% endif %}
+                                   </div>
+                                   <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                     <div class="me-2">
+                                       <small class="text-muted d-block mb-1">+{{ pupil.phone }}</small>
+                                       <h6 class="mb-0"><a href="{% url 'pupil-profile' pupil.id %}">{{ pupil.name }}</a></h6>
+                                     </div>
+                                     <div class="user-progress d-flex align-items-center gap-1">
+                                       <h6 class="mb-0">{{ pupil.total_amount }}</h6> <span class="text-muted"><i class='bx bx-money'></i></span>
+                                     </div>
+                                   </div>
+                                 </li>
+                                {% endfor %}
+                            </ul>
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
+                              <ul class="p-0 m-0">
+                                {% for teacher in teachers %}
+                                <li class="d-flex mb-4 pb-1">
+                                   <div class="avatar flex-shrink-0 me-3">
+                                     {% if teacher.image %}
+                                     <img src="{{ teacher.image.url }}" alt="User" class="rounded">
+                                     {% else %}
+                                     <img src="{% static 'assets/img/avatars/6.png' %}" alt="User" class="rounded">
+                                     {% endif %}
+                                   </div>
+                                   <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                     <div class="me-2">
+                                       <small class="text-muted d-block mb-1">+{{ teacher.phone }}</small>
+                                       <h6 class="mb-0"><a href="{% url 'teacher-profile' teacher.id %}">{{ teacher.name }}</a></h6>
+                                     </div>
+                                   </div>
+                                 </li>
+                                {% endfor %}
+                            </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

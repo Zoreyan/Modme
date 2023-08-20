@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h3>Курсы</h3>
+
+      <div class="row">
+        <div class="col-lg-2 mb-4 order-0">
+          <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">Добавить</button>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel" style="visibility: hidden;" aria-modal="true" role="dialog">
+            <div class="offcanvas-header">
+              <h5 id="offcanvasEndLabel" class="offcanvas-title">Добавление группы</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+              <div class="col-xl">
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                  </div>
+                  <div class="card-body">
+                    <form method="post" action="">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        <label class="form-label" for="title">Название</label>
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-captions"></i></span>
+                          {{ form.title }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="duration">Длительность урока</label>
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-phone2" class="input-group-text"><i class="bx bx-time"></i></span>
+                          {{ form.duration }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="price">Цена</label>
+                        <div class="input-group input-group-merge">
+                          <span class="input-group-text"><i class='bx bx-money'></i></span>
+                          {{ form.price }}
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Добавить</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        {% for course in courses %}
+        <a href="{% url 'course-detail' course.id %}" class="col-sm-6 col-lg-4 mb-4 text-dark">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <i class='bx bx-group' ></i>
+                <p class="card-text">{{ course.group_set.count }}</p>
+              </div>
+              <h5 class="card-title">{{ course.title }}</h5>
+              <div class="d-flex align-items-center gap-1">
+                <i class='bx bx-money' ></i>
+                <p class="card-text"><small class="text-muted">{{ course.price }}с</small></p>
+              </div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

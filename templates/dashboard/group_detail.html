@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="modal fade" id="basicModal" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel1">Удаление группы</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <span>Вы действительно хотите удалить эту группу?</span>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                  <form action="" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" name="delete">Удалить</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 order-1 mb-4">
+                        <div class="card h-100">
+                          <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Информация о группе</h5>
+                            {% if request.user.role == '1' %}
+                            <div class="dropdown">
+                              <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                  Удалить
+                                </button>
+                                <a class="dropdown-item" href="{% url 'group-update' group.id %}">Изменить</a>
+                              </div>
+                            </div>
+                            {% endif %}
+                          </div>
+                          <div class="card-body">
+                            <ul class="p-0 m-0">
+                              <small class="text-muted d-block mb-1">Название</small>
+                                <div class="me-2 mb-2">
+                                    <span class="mb-0">{{ group.title }}</span>
+                                </div>
+                                <small class="text-muted d-block mb-1">Дни</small>
+                                <div class="me-2 mb-2">
+                                    {% for days in group.days.all %}
+                                    <span class="mb-0 badge bg-success"><a style="color: #fff;" href="{% url 'home' %}">{{ days.title }}</a></span>
+                                    {% endfor %}
+                                </div>
+                                <small class="text-muted d-block mb-1">Начало урока</small>
+                                <div class="me-2 mb-2">
+                                    <span class="mb-0">{{ group.start_time }}</span>
+                                </div>
+                                <small class="text-muted d-block mb-1">Курс</small>
+                                <div class="me-2 mb-2">
+                                    <span class="mb-0"><a href="{% url 'course-detail' group.course.id %}">{{ group.course.title }}</a></span>
+                                </div>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="col-md-6 col-lg-4 order-2 mb-4">
+                      <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                          <h5 class="card-title m-0 me-2">Преподаватели</h5>
+                        </div>
+                        <div class="card-body">
+                          <ul class="p-0 m-0">
+                             {% for teacher in teachers %}
+                             <li class="d-flex mb-4 pb-1">
+                                <div class="avatar flex-shrink-0 me-3">
+                                  {% if teacher.image %}
+                                  <img src="{{ teacher.image.url }}" alt="User" class="rounded">
+                                  {% else %}
+                                  <img src="{% static 'assets/img/avatars/6.png' %}" alt="User" class="rounded">
+                                  {% endif %}
+                                </div>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                  <div class="me-2">
+                                    <small class="text-muted d-block mb-1">+{{ teacher.phone }}</small>
+                                    <h6 class="mb-0"><a href="{% url 'teacher-profile' teacher.id %}">{{ teacher.name }}</a></h6>
+                                  </div>
+                                  <div class="user-progress d-flex align-items-center gap-1">
+                                    <h6 class="mb-0">{{ teacher.group.pupil_set.count }}</h6> <span class="text-muted"><i class='bx bx-face'></i></span>
+                                  </div>
+                                </div>
+                              </li>
+                             {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 order-2 mb-4">
+                        <div class="card">
+                          <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Студенты</h5>
+                          </div>
+                          <div class="card-body">
+                            <ul class="p-0 m-0">
+                               {% for pupil in pupils %}
+                               <li class="d-flex mb-4 pb-1">
+                                  <div class="avatar flex-shrink-0 me-3">
+                                    {% if pupil.image %}
+                                    <img src="{{ pupil.image.url }}" alt="User" class="rounded">
+                                    {% else %}
+                                    <img src="{% static 'assets/img/avatars/5.png' %}" alt="User" class="rounded">
+                                    {% endif %}
+                                  </div>
+                                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                    <div class="me-2">
+                                      <small class="text-muted d-block mb-1">+{{ pupil.phone }}</small>
+                                      <h6 class="mb-0"><a href="{% url 'pupil-profile' pupil.id %}">{{ pupil.name }}</a></h6>
+                                    </div>
+                                    <div class="user-progress d-flex align-items-center gap-1">
+                                      <h6 class="mb-0">{{ pupil.total_amount }}</h6> <span class="text-muted"><i class='bx bx-money'></i></span>
+                                    </div>
+                                  </div>
+                                </li>
+                               {% endfor %}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

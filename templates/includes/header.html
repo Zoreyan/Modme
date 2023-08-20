@@ -1,0 +1,181 @@
+{% load static %}
+<nav class="layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+  id="layout-navbar">
+  <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+      <i class="bx bx-menu bx-sm"></i>
+    </a>
+  </div>
+  <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+    <div class="navbar-nav align-items-center">
+      <div class="nav-item d-flex align-items-center">
+        <span><strong>Моя академия</strong></span>
+      </div>
+    </div>
+    <ul class="navbar-nav flex-row align-items-center ms-auto">
+      <!-- Админ -->
+      {% if request.user.role == '1' %}
+      <li class="nav-item navbar-dropdown dropdown-user dropdown">
+        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+          <div class="avatar avatar-online">
+            {% if request.user.image %}
+            <img src="{{ request.image.url }}" alt="" class="w-px-40 h-auto rounded-circle">
+            {% else %}
+            <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-auto rounded-circle">
+            {% endif %}
+          </div>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+              <div class="d-flex">
+                <div class="flex-shrink-0 me-3">
+                  <div class="avatar avatar-online">
+                    {% if request.user.image %}
+                    <img src="{{ request.image.url }}" alt="" class="w-px-40 h-auto rounded-circle">
+                    {% else %}
+                    <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-auto rounded-circle">
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <span class="fw-semibold d-block"> {{ request.user.name }} </span>
+                  <small class="text-muted">{{ request.user.get_role_display }}</small>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <div class="dropdown-divider"></div>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+              <i class="bx bx-user me-2"></i>
+              <span class="align-middle">Мой профиль</span>
+            </a>
+          </li>
+
+          <li>
+            <div class="dropdown-divider"></div>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'logout' %}">
+              <i class="bx bx-power-off me-2"></i>
+              <span class="align-middle">Выход</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {% endif %}
+      <!-- Преподаватель -->
+      {% if request.user.role == '3' %}
+      <li class="nav-item navbar-dropdown dropdown-user dropdown">
+        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+          <div class="avatar avatar-online">
+            {% if request.user.teacher.image %}
+            <img src="{{ request.user.teacher.image.url }}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover; ">
+            {% else %}
+            <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-40 rounded-circle">
+            {% endif %}
+          </div>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+              <div class="d-flex">
+                <div class="flex-shrink-0 me-3">
+                  <div class="avatar avatar-online">
+                    {% if request.user.teacher.image %}
+                    <img src="{{ request.user.teacher.image.url }}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover; ">
+                    {% else %}
+                    <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-40 rounded-circle">
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <span class="fw-semibold d-block"> {{ request.user.teacher.name }} </span>
+                  <small class="text-muted">{{ request.user.get_role_display }}</small>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <div class="dropdown-divider"></div>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+              <i class="bx bx-user me-2"></i>
+              <span class="align-middle">Мой профиль</span>
+            </a>
+          </li>
+
+          <li>
+            <div class="dropdown-divider"></div>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'logout' %}">
+              <i class="bx bx-power-off me-2"></i>
+              <span class="align-middle">Выход</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {% endif %}
+
+      <!-- Студент -->
+      {% if request.user.role == '2' %}
+      <li class="nav-item navbar-dropdown dropdown-user dropdown">
+        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+          <div class="avatar avatar-online">
+            {% if request.user.pupil.image %}
+            <img src="{{ request.user.pupil.image.url }}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+            {% else %}
+            <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+            {% endif %}
+          </div>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+              <div class="d-flex">
+                <div class="flex-shrink-0 me-3">
+                  <div class="avatar avatar-online">
+                    {% if request.user.pupil.image %}
+                    <img src="{{ request.user.pupil.image.url }}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+                    {% else %}
+                    <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <span class="fw-semibold d-block"> {{ request.user.pupil.name }} </span>
+                  <small class="text-muted">{{ request.user.get_role_display }}</small>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <div class="dropdown-divider"></div>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+              <i class="bx bx-user me-2"></i>
+              <span class="align-middle">Мой профиль</span>
+            </a>
+          </li>
+
+          <li>
+            <div class="dropdown-divider"></div>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'logout' %}">
+              <i class="bx bx-power-off me-2"></i>
+              <span class="align-middle">Выход</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>

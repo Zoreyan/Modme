@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+      <div class="card">
+        <h5 class="card-header">Студенты</h5>
+        <div class="table-responsive text-nowrap">
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th>Ф.И.О</th>
+                <th>Баланс</th>
+                <th>Группа</th>
+                <th>Курс</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pupil in pupils %}
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-image">
+                      {% if pupil.image %}
+                    <img src="{{ pupil.image.url }}" alt="" width="50" height="50"
+                      style="object-fit: cover; object-position: center;">
+                    {% else %}
+                    <img src="{% static 'assets/img/avatars/5.png' %}" alt="" width="50" height="50"
+                      style="object-fit: cover; object-position: center;">
+                    {% endif %}
+                    </div>
+                    <a href="{% url 'pupil-profile' pupil.id %}">
+                      <span class="d-block"><strong class="text-dark">{{ pupil.name }}</strong></span>
+                      <span class="fs-12 d-block fw-normal text-muted">+{{ pupil.phone }}</span>
+                    </a>
+                  </div>
+                </td>
+                <td>{{ pupil.total_amount }}c</td>
+                <td>
+                  <a href="{% url 'group-detail' pupil.group.id %}" class="badge bg-label-info me-1">{{ pupil.group.title }}</a>
+                </td>
+                <td>
+                  <a href="{% url 'course-detail' pupil.group.course.id %}" class="badge bg-label-success me-1">{{ pupil.group.course.title }}</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

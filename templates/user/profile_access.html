@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-wrapper">
+      <div class="container-xxl flex-grow-1 container-p-y">
+<div class="row">
+<div class="col-md-12">
+<ul class="nav nav-pills flex-column flex-md-row mb-3">
+  <li class="nav-item"><a class="nav-link" href="{% url 'profile' request.user.id %}"><i class="bx bx-user me-1"></i> Аккаунт</a></li>
+  <li class="nav-item"><a class="nav-link active" href="{% url 'profile-access' request.user.id %}"><i class='bx bx-group' ></i> Доступ</a></li>
+</ul>
+<div class="card mb-4">
+  <h5 class="card-header">Логин и пароль</h5>
+  <!-- Account -->
+  <div class="card-body">
+  <!-- Преподаватель -->
+    {% if request.user.role == '3' %}
+    <div class="d-column align-items-start align-items-sm-center gap-4">
+      <p class="text-warning">Сохраните данные доступа в надежное место</p>
+        <span class="mb-2 d-block">Логин: {{ teacher.user.username }}</span>
+        <span class="mb-2 d-block">Пароль: {{ teacher.password }}</span>
+    </div>
+    {% endif %}
+    <!-- Администратор -->
+    {% if request.user.role == '1' %}
+    <div class="d-column align-items-start align-items-sm-center gap-4">
+      <p class="text-warning">Сохраните данные доступа в надежное место</p>
+        <span class="mb-2 d-block">Статус: Администратор</span>
+        <span class="mb-2 d-block">Имя: {{ request.user.name }}</span>
+        <span class="mb-2 d-block">Логин: {{ request.user.username }}</span>
+    </div>
+    {% endif %}
+    <!-- Администратор -->
+    {% if request.user.role == '2' %}
+    <div class="d-column align-items-start align-items-sm-center gap-4">
+      <p class="text-warning">Сохраните данные доступа в надежное место</p>
+        <span class="mb-2 d-block">Логин: {{ request.user.username }}</span>
+        <span class="mb-2 d-block">Пароль: {{ pupil.password }}</span>
+    </div>
+    {% endif %}
+  </div>
+</div>
+</div>
+</div>
+
+      </div>
+      {% include 'includes/footer.html' %}
+      <div class="content-backdrop fade"></div>
+    </div>
+{% endblock %}

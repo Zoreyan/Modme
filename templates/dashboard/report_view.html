@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h3>Отчеты</h3>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="col-lg-5 order-0">
+              <form action="" method="get">
+                <div class="nav-item d-flex align-items-center gap-2">
+                  <i class="bx bx-search fs-4 lh-0"></i>
+                  <label class="col-form-label" for="date_from">От</label>
+                  <input type="datetime-local" id="date_from" class="form-control shadow-none" placeholder="Поиск по дате от..." aria-label="Поиск по дате от..." name="date_from">
+                  <label class="col-form-label" for="date_to">До</label>
+                  <input type="datetime-local" id="date_to" class="form-control shadow-none" placeholder="Поиск по дате до..." aria-label="Поиск по дате до..." name="date_to">
+                  <button type="submit" class="btn btn-primary">Поиск</button>
+                </div>
+              </form>
+            </div>
+            <div class="order-0">
+              <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd"
+                aria-controls="offcanvasEnd">Добавить</button>
+              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel"
+                style="visibility: hidden;" aria-modal="true" role="dialog">
+                <div class="offcanvas-header">
+                  <h5 id="offcanvasEndLabel" class="offcanvas-title">Добавление отчета</h5>
+                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="col-xl">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                    </div>
+                    <div class="card-body">
+                      <form method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                          <label class="form-label" for="image">Описание</label>
+                          <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-captions'></i></span>
+                            {{ form.title }}
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="image">Цена</label>
+                          <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                                class="bx bx-money"></i></span>
+                            {{ form.price }}
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="phone">Тип</label>
+                          <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-phone2" class="input-group-text"><i class="bx bx-plus"></i></span>
+                            {{ form.type }}
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ---------------- -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-4 order-2 mb-4">
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="card-title m-0 me-2">Итого</h5>
+            </div>
+            <div class="card-body">
+              <ul class="p-0 m-0">
+                <li class="d-flex mb-4 pb-1">
+
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0">Расходов</h6>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                      <h6 class="mb-0 text-danger">- {{ total_minus }}</h6> <span class="text-muted">СОМ</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="d-flex mb-4 pb-1">
+
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0">Приход</h6>
+                    </div>
+                    <div class="user-progress d-flex align-items-center gap-1">
+                      <h6 class="mb-0 text-success">+ {{ total_plus }}</h6> <span class="text-muted">СОМ</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-lg-6 order-2 mb-4">
+          <div class="card">
+            <h5 class="card-header">Приход</h5>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Описание</th>
+                    <th>Дата</th>
+                    <th>Стоимость</th>
+                    <th>Действие</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                  {% for report in reports_plus %}
+                  <tr>
+                    <td><strong>{{ report.title }}</strong></td>
+
+                    <td><span class="me-1">{{ report.created|date:"d.m.Y" }}</span></td>
+                    <td><span class="badge bg-label-success me-1">+{{ report.price }}c</span></td>
+                    <td>
+                      <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ report.id }}" name="report_id">
+                        <button type="submit" class="btn btn-danger btn-sm" name="delete"><i class="bx bx-trash"></i></button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6 order-2 mb-4">
+          <div class="card">
+            <h5 class="card-header">Расход</h5>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Описание</th>
+                    <th>Дата</th>
+                    <th>Стоимость</th>
+                    <th>Действие</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                  {% for report in reports_minus %}
+                  <tr>
+                    <td><strong>{{ report.title }}</strong></td>
+
+                    <td><span class="me-1">{{ report.created|date:"d.m.Y" }}</span></td>
+                    <td><span class="badge bg-label-danger me-1">-{{ report.price }}c</span></td>
+                    <td>
+                      <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ report.id }}" name="report_id">
+                        <button type="submit" class="btn btn-danger btn-sm" name="delete"><i class="bx bx-trash"></i></button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

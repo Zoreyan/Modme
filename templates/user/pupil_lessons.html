@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="col-lg-6 mb-4 mb-xl-0">
+            <small class="text-light fw-semibold">Уроки</small>
+            <div class="demo-inline-spacing mt-3">
+                <ol class="list-group list-group-numbered">
+                    {% for lesson in lessons %}
+                    <li class="list-group-item"><a href="{% url 'lesson-detail' lesson.id %}"><strong class="text-dark">{{ lesson.title }}</strong></a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

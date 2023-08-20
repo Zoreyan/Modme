@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h3>Кабинеты</h3>
+
+    <div class="row">
+      <div class="col-lg-2 mb-4 order-0">
+        <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd"
+          aria-controls="offcanvasEnd">Добавить</button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel"
+          style="visibility: hidden;" aria-modal="true" role="dialog">
+          <div class="offcanvas-header">
+            <h5 id="offcanvasEndLabel" class="offcanvas-title">Добавление группы</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="col-xl">
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+              </div>
+              <div class="card-body">
+                <form method="post" action="">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label class="form-label" for="title">Название</label>
+                    <div class="input-group input-group-merge">
+                      <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                          class="bx bx-captions"></i></span>
+                      {{ form.title }}
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-4 col-lg-4">
+      <ul class="list-group list-group-flush">
+        {% for room in rooms %}
+        <li class="list-group-item">{{ room.title }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% include 'includes/footer.html' %}
+  <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

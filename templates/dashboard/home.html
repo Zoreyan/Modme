@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      firstDay: 1,
+      height: '600px',
+      slotMinTime: '09:00:00',
+      slotMaxTime: '20:00:00',
+      allDaySlot: false,
+      slotLabelFormat: {
+        hour: 'numeric',
+        minute: '2-digit',
+        omitZeroMinute: false,
+        meridiem: false, // чтобы отображать минуты в формате 2 цифры (например, 05)
+        hour12: false
+      },
+      eventClick: function (info) {
+        if (info.event.url) {
+          window.location.href = info.event.url;
+        }
+      },
+      initialView: 'timeGridWeek', // Просмотр недели с временем
+      headerToolbar: {
+        left: 'prev,next today',
+        right: 'timeGridWeek,timeGridDay dayGridMonth'
+      },
+      events: '/events/',
+    });
+    calendar.render();
+  });
+</script>
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container">
+      <h2>График занятий</h2>
+      <div id='calendar'></div>
+    </div>
+  </div>
+  {% include 'includes/footer.html' %}
+  <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}
