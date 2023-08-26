@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'apps.user',
     # Other Packages
     'django_summernote',
+    'import_export',
+    
 ]
 
 MIDDLEWARE = [
@@ -119,3 +121,19 @@ AUTH_USER_MODEL = 'user.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SUMMERNOTE_CONFIG = {
+    'width': '100%',
+    'height': '500',
+    'toolbar': [
+    ['style', ['style']],  # Стили текста: bold, italic, underline, strikethrough, clear
+    ['font', ['bold', 'italic', 'underline', 'clear']],  # Опции шрифта
+    ['fontname', ['fontname']],  # Выбор шрифта
+    ['fontsize', ['fontsize']],  # Размер шрифта
+    ['color', ['forecolor', 'backcolor']],  # Цвет текста и фона
+    ['para', ['ul', 'ol', 'paragraph']],  # Форматирование абзаца: список, нумерованный список, выравнивание
+    ['height', ['height']],  # Высота линий
+    ['insert', ['link', 'picture', 'video', 'table', 'hr']],  # Вставка элементов: ссылка, изображение, видео, таблица, разделитель
+    ['view', ['fullscreen', 'codeview']],  # Полноэкранный режим и режим кода
+    ['help', ['help']],  # Справка
+]
+}

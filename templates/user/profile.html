@@ -8,7 +8,7 @@
         <ul class="nav nav-pills flex-column flex-md-row mb-3">
           <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>
               Аккаунт</a></li>
-          {% if request.user.role != '1' %}
+          {% if request.user.role != '1' and request.user.role != '4' %}
           <li class="nav-item"><a class="nav-link" href="{% url 'profile-access' request.user.id %}"><i
                 class='bx bx-group'></i> Доступ</a></li>
           {% endif %}
@@ -48,7 +48,7 @@
                     <img src="{{ teacher.image.url }}" alt="" width="255" height="255"
                       style="object-fit: cover; object-position: center; border-radius: 50%;">
                     {% else %}
-                    <img src="{% static 'assets/img/avatars/6.png' %}" alt="" width="255" height="255"
+                    <img src="{% static 'assets/img/avatars/5.png' %}" alt="" width="255" height="255"
                       style="object-fit: cover; object-position: center; border-radius: 50%;">
                     {% endif %}
                   </div>
@@ -62,23 +62,8 @@
                   <span class="fs-12 fw-normal text-muted d-block">+{{ teacher.phone }}</span>
                 </div>
                 <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
-                  <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                    <h6 class="fs-15 fw-bolder">{{ teacher_total_payment }}с</h6>
-                    <p class="fs-12 text-muted mb-0">Зарплата</p>
-                  </div>
-                  <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
-                    <h6 class="fs-15 fw-bolder">{{ teacher.group.pupil_set.count }}</h6>
-                    <p class="fs-12 text-muted mb-0">Студентов</p>
-                  </div>
                 </div>
               </div>
-              <ul class="list-unstyled mb-4">
-
-                <li class="hstack justify-content-between mb-0">
-                  <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Группа:</span>
-                  <a href="{% url 'group-detail' teacher.group.id %}" class="float-end">{{ teacher.group.title }}</a>
-                </li>
-              </ul>
             </div>
             {% endif %}
 
@@ -114,21 +99,48 @@
               </div>
               <ul class="list-unstyled mb-4">
                 <li class="hstack justify-content-between mb-4">
-                  <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Логин:</span>
-                  <span class="float-end">{{ pupil.user.username }}</span>
-                </li>
-                <li class="hstack justify-content-between mb-4">
-                  <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>Пароль:</span>
-                  <span class="float-end">{{ pupil.password }}</span>
-                </li>
-                <li class="hstack justify-content-between mb-4">
                   <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>KPI:</span>
                   <span class="float-end">{{ pupil.total_percentage }}</span>
                 </li>
-                <li class="hstack justify-content-between mb-0">
-                  <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Группа:</span>
-                  <a href="{% url 'group-detail' pupil.group.id %}" class="float-end">{{ pupil.group.title }}</a>
+
+              </ul>
+            </div>
+            {% endif %}
+
+            <!-- Оператор -->
+            {% if request.user.role == '4' %}
+            <div class="card-body">
+              <div class="mb-4 text-center">
+                <div class="wd-150 ht-150 mx-auto mb-3 position-relative">
+                  <div class="avatar-image wd-150 ht-150">
+                    {% if request.user.operator.image %}
+                    <img src="{{ request.user.operator.image.url }}" alt="" width="255" height="255"
+                      style="object-fit: cover; object-position: center; border-radius: 50%;">
+                    {% else %}
+                    <img src="{% static 'assets/img/avatars/5.png' %}" alt="" width="255" height="255"
+                      style="object-fit: cover; object-position: center; border-radius: 50%;">
+                    {% endif %}
+                  </div>
+                  <div class="wd-10 ht-10 text-success rounded-circle position-absolute translate-middle"
+                    style="top: 76%; right: 10px">
+                    <i class="bi bi-patch-check-fill"></i>
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <span class="fs-14 fw-bold d-block">{{ request.user.operator.name }}</span>
+                  <span class="fs-12 fw-normal text-muted d-block">+{{ request.user.operator.phone }}</span>
+                </div>
+              </div>
+              <ul class="list-unstyled mb-4">
+                <li class="hstack justify-content-between mb-4">
+                  <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Логин:</span>
+                  <span class="float-end">{{ request.user.operator.user.username }}</span>
                 </li>
+                <li class="hstack justify-content-between mb-4">
+                  <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>Пароль:</span>
+                  <span class="float-end">{{ request.user.operator.password }}</span>
+                </li>
+
               </ul>
             </div>
             {% endif %}

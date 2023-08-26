@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+
+          <div class="col-lg-3 order-0">
+            <form action="" method="get">
+              <div class="nav-item d-flex align-items-center gap-2">
+                <i class="bx bx-search fs-4 lh-0"></i>
+                <input type="text" class="form-control shadow-none" placeholder="Поиск..." aria-label="Поиск..."
+                  name="operator_q">
+              </div>
+            </form>
+          </div>
+          <div class="order-0">
+            <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd"
+              aria-controls="offcanvasEnd">Добавить</button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel"
+              style="visibility: hidden;" aria-modal="true" role="dialog">
+              <div class="offcanvas-header">
+                <h5 id="offcanvasEndLabel" class="offcanvas-title">Добавление Опреатора</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                  aria-label="Close"></button>
+              </div>
+              <div class="col-xl">
+                <div class="card mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                  </div>
+                  <div class="card-body">
+                    <form method="post" action="" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        <label class="form-label" for="image">Изображение</label>
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                              class="bx bx-image-alt"></i></span>
+                          {{ form.image }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                              class="bx bx-user"></i></span>
+                          {{ form.name }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="phone">Телефонный номер</label>
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-phone2" class="input-group-text"><i
+                              class="bx bx-phone"></i></span>
+                          {{ form.phone }}
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Добавить</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h5 class="card-header">Администраторы</h5>
+      <div class="table-responsive text-nowrap">
+        <table class="table table-borderless">
+          <thead>
+            <tr class="border-b">
+              <th scope="row">Ф.И.О</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for operator in operators %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                  <div class="avatar-image">
+                    {% if operator.image %}
+                    <img src="{{ operator.image.url }}" alt="" width="50" height="50"
+                      style="object-fit: cover; object-position: center;">
+                    {% else %}
+                    <img src="{% static 'assets/img/avatars/5.png' %}" alt="" width="50" height="50"
+                      style="object-fit: cover; object-position: center;">
+                    {% endif %}
+                  </div>
+                  <a href="{% url 'operator-profile' operator.id %}">
+                    <span class="d-block"><strong class="text-dark">{{ operator.name }}</strong></span>
+                    <span class="fs-12 d-block fw-normal text-muted">+{{ operator.phone }}</span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% include 'includes/footer.html' %}
+  <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

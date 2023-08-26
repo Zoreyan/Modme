@@ -52,10 +52,18 @@
                             </div>
                           </div>
                           <div class="mb-3">
-                            <label class="form-label" for="group">Группа</label>
-                            <div class="input-group input-group-merge">
-                              <span class="input-group-text"><i class='bx bx-group' ></i></span>
-                              {{ form.group }}
+                            <div class="accordion-item card">
+                              <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne">
+                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1" aria-expanded="false">
+                                  Группы
+                                </button>
+                              </h2>
+                      
+                              <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon" style="">
+                                <div class="accordion-body">
+                                  {{ form.group }}
+                                </div>
+                              </div>
                             </div>
                           </div>
                           <button type="submit" class="btn btn-primary">Добавить</button>
@@ -79,13 +87,10 @@
               <tr>
                 <th>Ф.И.О</th>
                 <th>Баланс</th>
-                <th>Группа</th>
-                <th>Курс</th>
               </tr>
             </thead>
             <tbody>
               {% for pupil in pupils %}
-
               <tr>
                 <td>
                   <div class="d-flex align-items-center gap-3">
@@ -105,12 +110,7 @@
                   </div>
                 </td>
                 <td>{{ pupil.total_amount }}c</td>
-                <td>
-                  <a href="{% url 'group-detail' pupil.group.id %}" class="badge bg-label-info me-1">{{ pupil.group.title }}</a>
-                </td>
-                <td>
-                  <a href="{% url 'course-detail' pupil.group.course.id %}" class="badge bg-label-success me-1">{{ pupil.group.course.title }}</a>
-                </td>
+
               </tr>
               {% endfor %}
             </tbody>

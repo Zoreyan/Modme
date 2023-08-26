@@ -41,7 +41,7 @@
     <div class="card mb-4 col-lg-4">
       <ul class="list-group list-group-flush">
         {% for room in rooms %}
-        <li class="list-group-item">{{ room.title }}</li>
+        <li class="list-group-item"><a href="{% url 'room-detail' room.id %}">{{ room.title }}</a></li>
         {% endfor %}
       </ul>
     </div>

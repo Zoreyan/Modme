@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="card">
+      <h5 class="card-header">Клиенты</h5>
+      <div class="table-responsive text-nowrap">
+        <table class="table table-borderless">
+          <thead>
+            <tr class="border-b">
+              <th scope="row">Ф.И.О</th>
+              <th>Контактный номер</th>
+              <th>Whatsapp</th>
+              <th>Отвечено</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for support in supports %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="d-block"><strong class="text-dark">{{ support.name }}</strong></span>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="d-block"><strong class="text-dark">{{ support.phone }}</strong></span>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="d-block"><strong class="text-dark">{{ support.whatsapp }}</strong></span>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                    {% if support.is_called %}
+                    
+                    <span class="badge bg-success">Отвечено</span>
+                    {% else %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="support_id" value="{{ support.id }}">
+                        <button class="btn btn-success btn-sm" type="submit">Ответить</button>
+                    </form>
+                    {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% include 'includes/footer.html' %}
+  <div class="content-backdrop fade"></div>
+</div>
+{% endblock %}

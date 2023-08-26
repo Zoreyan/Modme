@@ -7,6 +7,7 @@ class WeekDays(models.Model):
         return self.title
 
 class Course(models.Model):
+    image = models.ImageField(upload_to='course_images/', null=True)
     title = models.CharField(max_length=140)
     DURATION = (
         ('30', '30 мин'),
@@ -21,16 +22,6 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Group(models.Model):
-    title = models.CharField(max_length=40)
-    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
-    days = models.ManyToManyField(WeekDays)
-    start_time = models.TimeField(auto_now_add=False, null=True)
-
-    def __str__(self):
-        return self.title
     
 
 class Room(models.Model):
@@ -38,18 +29,32 @@ class Room(models.Model):
 
     def __str__(self):
         return self.title
-    
 
-class Report(models.Model):
-    TYPE = (
-        ('plus', 'Приход'),
-        ('minus', 'Расход')
-    )
 
-    title = models.CharField(max_length=140)
-    price = models.FloatField()
-    type = models.CharField(choices=TYPE, max_length=40)
-    created = models.DateTimeField(auto_now_add=True)
+class Group(models.Model):
+    title = models.CharField(max_length=40)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
+    days = models.ManyToManyField(WeekDays)
+    color = models.CharField(max_length=10, null=True, default='#10D5D2')
+    start_time = models.TimeField(auto_now_add=False, null=True)
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
+
+    @property
+    def group_pupil_percentage(self):
+        total_pupils = self.pupil_set.count()
+        total_percentage = sum([pupil.total_percentage for pupil in self.pupil_set.all()])
+        
+        return round(total_percentage / total_pupils) if total_pupils else 0
 
     def __str__(self):
         return self.title
+
+
+class Support(models.Model):
+    name = models.CharField(max_length=20)
+    phone = models.IntegerField()
+    whatsapp = models.IntegerField()
+    is_called = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.name

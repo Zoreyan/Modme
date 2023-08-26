@@ -11,8 +11,6 @@
           <thead>
             <tr class="border-b">
               <th scope="row">Ф.И.О</th>
-              <th>Группа</th>
-              <th>Курс</th>
               <th>KPI</th>
             </tr>
           </thead>
@@ -26,7 +24,7 @@
                     <img src="{{ teacher.image.url }}" alt="" width="50" height="50"
                       style="object-fit: cover; object-position: center;">
                     {% else %}
-                    <img src="{% static 'assets/img/avatars/6.png' %}" alt="" width="50" height="50"
+                    <img src="{% static 'assets/img/avatars/5.png' %}" alt="" width="50" height="50"
                       style="object-fit: cover; object-position: center;">
                     {% endif %}
                   </div>
@@ -37,13 +35,7 @@
                 </div>
               </td>
               <td>
-                <a href="{% url 'group-detail' teacher.group.id %}" class="badge bg-label-info me-1">{{ teacher.group }}</a>
-              </td>
-              <td>
-                <a href="{% url 'course-detail' teacher.group.course.id %}" class="badge bg-label-success me-1">{{ teacher.group.course.title }}</a>
-              </td>
-              <td>
-                <span class="badge {% if teacher.pupil_percentage > 80 %}bg-success{% else %}bg-danger{% endif %}">
+                <span class="badge {% if teacher.group_pupil_percentage > 80 %}bg-success{% else %}bg-danger{% endif %}">
                   {{ teacher.group_pupil_percentage }}
                 </span>
               </td>

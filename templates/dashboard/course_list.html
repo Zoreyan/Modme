@@ -18,8 +18,15 @@
                   <div class="card-header d-flex justify-content-between align-items-center">
                   </div>
                   <div class="card-body">
-                    <form method="post" action="">
+                    <form method="post" action="" enctype="multipart/form-data">
                       {% csrf_token %}
+                      <div class="mb-3">
+                        <label class="form-label" for="title">Постер</label>
+                        <div class="input-group input-group-merge">
+                          <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-captions"></i></span>
+                          {{ form.image }}
+                        </div>
+                      </div>
                       <div class="mb-3">
                         <label class="form-label" for="title">Название</label>
                         <div class="input-group input-group-merge">
@@ -53,16 +60,23 @@
       <div class="row">
         {% for course in courses %}
         <a href="{% url 'course-detail' course.id %}" class="col-sm-6 col-lg-4 mb-4 text-dark">
-          <div class="card">
+          <div class="card h-100">
+            {% if course.image %}
+            <img class="card-img-top" src="{{ course.image.url }}" alt="Card image cap">
+            {% else %}
+            <img class="card-img-top" src="{% static 'landing_assets/img/popular-course/p1.jpg' %}" alt="Card image cap">
+            {% endif %}
             <div class="card-body">
-              <div class="d-flex align-items-center mb-2">
-                <i class='bx bx-group' ></i>
-                <p class="card-text">{{ course.group_set.count }}</p>
-              </div>
               <h5 class="card-title">{{ course.title }}</h5>
-              <div class="d-flex align-items-center gap-1">
-                <i class='bx bx-money' ></i>
-                <p class="card-text"><small class="text-muted">{{ course.price }}с</small></p>
+              <div class="d-flex align-items-center gap-4 justify-content-between">
+                <div class="d-flex align-items-center gap-1">
+                  <i class='bx bx-group'></i>
+                  <p class="card-text">{{ course.group_set.count }}</p>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                  <i class='bx bx-money' ></i>
+                  <p class="card-text"><small class="text-muted">{{ course.price }}с</small></p>
+                </div>
               </div>
             </div>
           </div>

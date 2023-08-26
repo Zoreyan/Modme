@@ -8,7 +8,8 @@ class User(AbstractUser):
     STATUS = (
         ('1', 'Админ'),
         ('2', 'Студент'),
-        ('3', 'Преподаватель')
+        ('3', 'Преподаватель'),
+        ('4', 'Администратор')
     )
     role = models.CharField(null=True, choices=STATUS, max_length=140, default='1')
     USERNAME_FIELD = 'username'
@@ -57,7 +58,7 @@ class Answer(models.Model):
 class TestResult(models.Model):
     pupil = models.ForeignKey('Pupil', on_delete=models.CASCADE, null=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True)
-    questions = models.ManyToManyField(Question, null=True)
+    questions = models.ManyToManyField(Question)
     total_correct_answers = models.IntegerField(null=True)
     total_questions = models.IntegerField(null=True)
     
@@ -72,12 +73,24 @@ class TestResult(models.Model):
         return self.pupil.name
 
 
+class Operator(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=150)
+    image = models.ImageField(upload_to='profile_photos', null=True, blank=True)
+    phone = models.CharField(max_length=12, default='996')
+    group = models.ManyToManyField(Group)
+    password = models.CharField(max_length=20, null=True, default=' ')
+
+    def __str__(self):
+        return self.name
+
+
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=150)
     image = models.ImageField(upload_to='profile_photos', null=True, blank=True)
     phone = models.CharField(max_length=12, default='996')
-    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
+    group = models.ManyToManyField(Group)
     payment = models.IntegerField(null=True)
     password = models.CharField(max_length=20, null=True, default=' ')
 
@@ -86,16 +99,22 @@ class Teacher(models.Model):
 
     @property
     def group_pupil_percentage(self):
-        pupils = self.group.pupil_set.all()
-        total_percentage = sum([pupil.total_percentage for pupil in pupils])
-        return round(total_percentage / len(pupils)) if pupils else 0
+        total_pupils = 0
+        total_percentage = 0
+        
+        for group in self.group.all():
+            pupils = group.pupil_set.all()
+            total_pupils += len(pupils)
+            total_percentage += sum([pupil.total_percentage for pupil in pupils])
+        
+        return round(total_percentage / total_pupils) if total_pupils else 0
 
 class Pupil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=150)
     image = models.ImageField(upload_to='profile_photos', null=True, blank=True)
     phone = models.CharField(max_length=12, default='996')
-    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
+    group = models.ManyToManyField(Group)
     password = models.CharField(max_length=20, null=True, default=' ')
 
 
@@ -164,9 +183,33 @@ class Pupil(models.Model):
         return self.skill_percentage('listening')
 
 
+class Attendance(models.Model):
+    pupils = models.ManyToManyField(Pupil)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.lesson.title} ({self.date})'
+
+
 class Transaction(models.Model):
     pupil = models.ForeignKey(Pupil, on_delete=models.SET_NULL, null=True)
     amount = models.IntegerField()
     comment = models.TextField(max_length=140)
     created = models.DateField(auto_now_add=False)
 
+
+class Report(models.Model):
+    operator = models.ForeignKey(Operator, on_delete=models.CASCADE, null=True)
+    TYPE = (
+        ('plus', 'Приход'),
+        ('minus', 'Расход')
+    )
+
+    title = models.CharField(max_length=140)
+    price = models.FloatField()
+    type = models.CharField(choices=TYPE, max_length=40)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

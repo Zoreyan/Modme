@@ -21,21 +21,19 @@
   <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}">
   <script src="{% static 'assets/js/config.js' %}"></script>
 </head>
-
 <body>
   <div class="container">
     <div class="d-flex gap-4 align-items-center justify-content-between">
       {% if request.user.role == '3' %}
-      <a href="{% url 'teacher-lessons' %}" class="btn rounded-pill btn-icon btn-secondary"><i
+      <a href="{% url 'home' %}" class="btn rounded-pill btn-icon btn-secondary"><i
           class='bx bx-left-arrow-alt'></i></a>
       {% elif request.user.role == '2' %}
-      <a href="{% url 'pupil-lessons' %}" class="btn rounded-pill btn-icon btn-secondary"><i
+      <a href="{% url 'home' %}" class="btn rounded-pill btn-icon btn-secondary"><i
           class='bx bx-left-arrow-alt'></i></a>
       {% else %}
       <a href="{% url 'lesson-list' lesson.course.id  %}" class="btn rounded-pill btn-icon btn-secondary"><i
           class='bx bx-left-arrow-alt'></i></a>
       {% endif %}
-
       <h3 class="fw-bold p-4">{{ lesson.title }}</h3>
       {% if request.user.role == '1' %}
       <div class="btn-group">
@@ -126,16 +124,59 @@
         <span></span>
       </form>
       {% else %}
-      <form action="" method="post">
-        {% csrf_token %}
-        {% if request.user.role == '3' %}
-        {% if lesson.access and request.user.teacher.group in lesson.group_access.all %}
-        <button class="btn btn-danger" type="submit" name="access">Запретить доступ</button>
-        {% else %}
-        <button class="btn btn-success" type="submit" name="access">Разрешить доступ</button>
-        {% endif %}
-        {% endif %}
-      </form>
+      <div class="d-flex gap-1">
+        <form action="" method="post">
+          {% csrf_token %}
+          {% if request.user.role == '3' %}
+          {% if lesson.access and group in lesson.group_access.all %}
+          <button class="btn btn-danger" type="submit" name="access"><i class='bx bx-x'></i></button>
+          {% else %}
+          <button class="btn btn-success" type="submit" name="access"><i class='bx bx-check'></i></button>
+          {% endif %}
+          {% endif %}
+        </form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter">
+          <i class='bx bx-group'></i>
+        </button>
+        <div class="modal fade" id="modalCenter" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Ваши студенты</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="" method="post">
+                {% if attendances == None %}
+                <div class="modal-body">
+                  {% csrf_token %}
+                  <ul>
+                    {% for pupil in pupils %}
+                    <li>
+                      <input type="checkbox" name="pupil_attendance" id="{{ pupil.id }}" value="{{ pupil.id }}">
+                      <label for="{{ pupil.id }}">{{ pupil.name }}</label>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
+                  <button class="btn btn-primary" type="submit">Подтвердить</button>
+                </div>
+                {% else %}
+                <div class="modal-body">
+                  <h6>На занятия пришли...</h6>
+                  {% for pupil in attendances.pupils.all %}
+                  <li>
+                    <span>{{ pupil.name }}</span>
+                  </li>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       {% endif %}
       {% endif %}
     </div>
@@ -146,7 +187,7 @@
     <div class="row mb-5">
       <h4>Tests</h4>
 
-      {% if not test_result_access  %}
+      {% if not test_result_access %}
       <div class="col-md-4">
         <form action="" method="post">
           {% csrf_token %}
@@ -172,7 +213,7 @@
           {% if request.user.role == '2' and questions %}
           <button class="btn btn-primary" type="submit" name="answer_submit">Отправить</button>
           {% endif %}
-  
+
         </form>
       </div>
       {% else %}

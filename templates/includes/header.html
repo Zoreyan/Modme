@@ -176,6 +176,61 @@
         </ul>
       </li>
       {% endif %}
+
+            <!-- Оператор -->
+            {% if request.user.role == '4' %}
+            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+              <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                <div class="avatar avatar-online">
+                  {% if request.user.operator.image %}
+                  <img src="{{ request.user.operator.image.url }}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+                  {% else %}
+                  <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+                  {% endif %}
+                </div>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+                    <div class="d-flex">
+                      <div class="flex-shrink-0 me-3">
+                        <div class="avatar avatar-online">
+                          {% if request.user.operator.image %}
+                          <img src="{{ request.user.operator.image.url }}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+                          {% else %}
+                          <img src="{% static 'assets/img/avatars/1.png' %}" alt="" class="w-px-40 h-40 rounded-circle" style="object-fit: cover;">
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="flex-grow-1">
+                        <span class="fw-semibold d-block"> {{ request.user.operator.name }} </span>
+                        <small class="text-muted">{{ request.user.get_role_display }}</small>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <div class="dropdown-divider"></div>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+                    <i class="bx bx-user me-2"></i>
+                    <span class="align-middle">Мой профиль</span>
+                  </a>
+                </li>
+      
+                <li>
+                  <div class="dropdown-divider"></div>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'logout' %}">
+                    <i class="bx bx-power-off me-2"></i>
+                    <span class="align-middle">Выход</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {% endif %}
     </ul>
   </div>
 </nav>

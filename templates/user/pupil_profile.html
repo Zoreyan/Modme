@@ -44,22 +44,20 @@
                 <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>Пароль:</span>
                 <span class="float-end">{{ pupil.password }}</span>
               </li>
-              <li class="hstack justify-content-between mb-0">
-                <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Группа:</span>
-                <a href="{% url 'group-detail' pupil.group.id %}" class="float-end">{{ pupil.group.title }}</a>
-              </li>
             </ul>
           </div>
         </div>
       </div>
-
-
       <div class="col-md-6 h-100">
         <div class="nav-align-top mb-4">
           <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
               <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                 data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="true">Аккаунт</button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-groups"
+                aria-controls="navs-top-groups" aria-selected="false">Группы</button>
             </li>
             <li class="nav-item">
               <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-payment"
@@ -92,9 +90,20 @@
                       <label for="phone" class="form-label">Контактный номер</label>
                       {{ form.phone }}
                     </div>
-                    <div class="mb-3 col-md-6">
-                      <label for="group" class="form-label">Группа</label>
-                      {{ form.group }}
+                    <div class="mb-3">
+                      <div class="accordion-item card">
+                        <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne">
+                          <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1" aria-expanded="false">
+                            Группы
+                          </button>
+                        </h2>
+                
+                        <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon" style="">
+                          <div class="accordion-body">
+                            {{ form.group }}
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                   </div>
@@ -103,6 +112,19 @@
                   </div>
                 </form>
               </div>
+            </div>
+            <div class="tab-pane fade" id="navs-top-groups" role="tabpanel">
+              <ul class="p-0 m-0">
+                {% for group in pupil.group.all %}
+                <li class="d-flex mb-4">
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                      <h6 class="mb-0"><a href="{% url 'group-detail' group.id %}">{{ group.title }}</a></h6>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
             </div>
             <div class="tab-pane fade" id="navs-top-payment" role="tabpanel">
               <form method="post">
@@ -276,12 +298,6 @@
               </div>
             </div>
           </div>
-          <ul class="list-unstyled mb-4">
-            <li class="hstack justify-content-between mb-0">
-              <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Группа:</span>
-              <a href="{% url 'group-detail' pupil.group.id %}" class="float-end">{{ pupil.group.title }}</a>
-            </li>
-          </ul>
         </div>
       </div>
     </div>

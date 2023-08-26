@@ -21,14 +21,25 @@
                                     {{ form.course }}
                                 </div>
                             </div>
+                            <div class="d-flex gap-4">
+                                <div class="mb-3">
+                                    <label class="form-label" for="basic-default-company">Начало урока</label>
+                                    {{ form.start_time }}
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="basic-default-company">Аудитория</label>
+                                    {{ form.room }}
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="basic-default-company">Цвет для графика</label>
+                                    {{ form.color }}
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label" for="basic-default-company">Дни</label>
                                 {{ form.days }}
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="basic-default-company">Начало урока</label>
-                                {{ form.start_time }}
-                            </div>
+                            
                             <button type="submit" class="btn btn-primary">Применить изменения</button>
                         </form>
                     </div>

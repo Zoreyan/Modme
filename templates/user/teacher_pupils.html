@@ -12,8 +12,6 @@
               <tr>
                 <th>Ф.И.О</th>
                 <th>Баланс</th>
-                <th>Группа</th>
-                <th>Курс</th>
               </tr>
             </thead>
             <tbody>
@@ -37,12 +35,6 @@
                   </div>
                 </td>
                 <td>{{ pupil.total_amount }}c</td>
-                <td>
-                  <a href="{% url 'group-detail' pupil.group.id %}" class="badge bg-label-info me-1">{{ pupil.group.title }}</a>
-                </td>
-                <td>
-                  <a href="{% url 'course-detail' pupil.group.course.id %}" class="badge bg-label-success me-1">{{ pupil.group.course.title }}</a>
-                </td>
               </tr>
               {% endfor %}
             </tbody>

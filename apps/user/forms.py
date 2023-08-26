@@ -34,6 +34,32 @@ class CreateUserForm(UserCreationForm):
             })
         }
 
+
+class OperatorForm(forms.ModelForm):
+    class Meta:
+        model = Operator
+        fields = ['name', 'phone', 'image']
+        widgets = {
+            'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'id': 'image',
+            }),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'type': 'text',
+                'id': 'fullname',
+                'placeholder': '...'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'type': 'number',
+                'id': 'phone',
+                'placeholder': '996',
+                'value': '996'
+            }),
+        }
+
+
 class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
@@ -63,10 +89,7 @@ class TeacherForm(forms.ModelForm):
                 'placeholder': '...',
                 'value': '1000'
             }),
-            'group': forms.Select(attrs={
-                'class': 'form-control',
-                'id': 'group',
-            }),
+            'group': forms.CheckboxSelectMultiple,
         }
 
 
@@ -94,10 +117,7 @@ class PupilForm(forms.ModelForm):
                 'value': '996'
             }),
 
-            'group': forms.Select(attrs={
-                'class': 'form-control',
-                'id': 'group',
-            }),
+            'group': forms.CheckboxSelectMultiple
         }
     
 
@@ -148,7 +168,7 @@ class GroupForm(forms.ModelForm):
 
     class Meta:
         model = Group
-        fields = ['title', 'course', 'days', 'start_time']
+        fields = ['title', 'course', 'days', 'start_time', 'room', 'color']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -162,10 +182,19 @@ class GroupForm(forms.ModelForm):
                 'id': 'course',
             }),
             'days': forms.CheckboxSelectMultiple,
+
             'start_time': forms.TimeInput(attrs={
                 'class': 'form-control',
                 'type': 'time',
                 'value': '12:30:00'
+            }),
+            'room': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'room'
+            }),
+            'color': forms.TextInput(attrs={
+                'class': 'form-control',
+                'type': 'color'
             })
 
         }
@@ -174,8 +203,12 @@ class GroupForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['title', 'duration', 'price']
+        fields = ['image', 'title', 'duration', 'price']
         widgets = {
+            'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'id': 'image'
+            }),
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'type': 'text',
@@ -185,6 +218,7 @@ class CourseForm(forms.ModelForm):
             'price': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'price',
+                
             }),
             'duration': forms.Select(attrs={
                 'class': 'form-control',
@@ -256,3 +290,27 @@ class ReportForm(forms.ModelForm):
                 }),
 
             }
+        
+class SupportForm(forms.ModelForm):
+    class Meta:
+        model = Support
+        fields = ['name', 'phone', 'whatsapp']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                 'class': 'form-control',
+                 'placeholder': 'Имя',
+                 'id': 'name',
+            }),
+            'phone': forms.TextInput(attrs={
+                 'class': 'form-control',
+                 'placeholder': 'Контактный номер',
+                 'id': 'phone',
+                 'type': 'number'
+            }),
+            'whatsapp': forms.TextInput(attrs={
+                 'class': 'form-control',
+                 'placeholder': 'Whatsapp',
+                 'id': 'whatsapp',
+                 'type': 'number'
+            }),
+        }

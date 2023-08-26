@@ -65,12 +65,19 @@
                           {{ form.payment }}
                         </div>
                       </div>
-
                       <div class="mb-3">
-                        <label class="form-label" for="group">Группа</label>
-                        <div class="input-group input-group-merge">
-                          <span class="input-group-text"><i class='bx bx-group'></i></span>
-                          {{ form.group }}
+                        <div class="accordion-item card">
+                          <h2 class="accordion-header text-body d-flex justify-content-between" id="accordionIconOne">
+                            <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accordionIcon-1" aria-controls="accordionIcon-1" aria-expanded="false">
+                              Группы
+                            </button>
+                          </h2>
+                  
+                          <div id="accordionIcon-1" class="accordion-collapse collapse" data-bs-parent="#accordionIcon" style="">
+                            <div class="accordion-body">
+                              {{ form.group }}
+                            </div>
+                          </div>
                         </div>
                       </div>
                       {% if messages %}
@@ -101,9 +108,6 @@
             <tr class="border-b">
               <th scope="row">Ф.И.О</th>
               <th>Оплата</th>
-              <th>Студентов</th>
-              <th>Группа</th>
-              <th>Курс</th>
             </tr>
           </thead>
           <tbody>
@@ -116,7 +120,7 @@
                     <img src="{{ teacher.image.url }}" alt="" width="50" height="50"
                       style="object-fit: cover; object-position: center;">
                     {% else %}
-                    <img src="{% static 'assets/img/avatars/6.png' %}" alt="" width="50" height="50"
+                    <img src="{% static 'assets/img/avatars/5.png' %}" alt="" width="50" height="50"
                       style="object-fit: cover; object-position: center;">
                     {% endif %}
                   </div>
@@ -128,13 +132,6 @@
               </td>
               <td>
                 <span>{{ teacher.payment }}c</span>
-              </td>
-              <td>{{ teacher.group.pupil_set.count }}</td>
-              <td>
-                <a href="{% url 'group-detail' teacher.group.id %}" class="badge bg-label-info me-1">{{ teacher.group }}</a>
-              </td>
-              <td>
-                <a href="{% url 'course-detail' teacher.group.course.id %}" class="badge bg-label-success me-1">{{ teacher.group.course.title }}</a>
               </td>
             </tr>
             {% endfor %}
